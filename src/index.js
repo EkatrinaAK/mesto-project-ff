@@ -2,7 +2,7 @@ import "./pages/index.css"; //настройка css
 import { initialCards } from "./cards"; // добавление картинок
 
 import {createCard, likeCard, removeCard} from './components/card.js';
-import {openModal, closeModal} from './components/modal.js'; 
+import {openModal, closeModal, closeOverley} from './components/modal.js'; 
 
 const content = document.querySelector(".content");
 const pageSection = content.querySelector(".places");
@@ -12,19 +12,19 @@ const btnEdit = content.querySelector(".profile__edit-button");
 const btnCard = content.querySelector(".profile__add-button");
 
 const profilClose = document.querySelector(".popup_type_edit .popup__close");
-const newProfil = document.querySelector(".popup_type_edit");
-const profformElement = document.querySelector(".popup_type_edit .popup__form");
+const profilPopup = document.querySelector(".popup_type_edit");
+const profileformElement = document.querySelector(".popup_type_edit .popup__form");
 
-const newCard = document.querySelector(".popup_type_new-card");
+const cardPopup = document.querySelector(".popup_type_new-card");
 const closeCard = document.querySelector(".popup_type_new-card .popup__close");
-const imgformElement = document.querySelector(".popup_type_new-card .popup__form");
+const cardformElement = document.querySelector(".popup_type_new-card .popup__form");
 
-const fullImage = document.querySelector(".popup_type_image");
-const closeImage = fullImage.querySelector(".popup__close");
+const imagePopup = document.querySelector(".popup_type_image");
+const closeImage = imagePopup.querySelector(".popup__close");
 
 //открыть окно профиля
 function openProfile() {
-  openModal(newProfil);
+  openModal(profilPopup);
   const profTitle = document.querySelector(".profile__title");
   const profDiscr = document.querySelector(".profile__description");
   const inputName = document.querySelector(".popup__input_type_name");
@@ -44,19 +44,19 @@ function profileSubmit(evt) {
   const inputDiscr = document.querySelector(".popup__input_type_description");
   profTitle.textContent = inputName.value;
   profDiscr.textContent = inputDiscr.value;
-  closeModal(newProfil);
+  closeModal(profilPopup);
 }
 
-profformElement.addEventListener("submit", profileSubmit); // событие
+profileformElement.addEventListener("submit", profileSubmit); // событие
 
 //профиль закрыть
 profilClose.addEventListener("click", function () {
-  closeModal(newProfil);
+  closeModal(profilPopup);
 });
 
 //открыть окно новой карточки
 function openCard() {
-  openModal(newCard);
+  openModal(cardPopup);
 }
 
 btnCard.addEventListener("click", openCard);
@@ -73,31 +73,34 @@ function createCardSubmit(evt) {
   const cardElement = createCard(item, removeCard,likeCard, openfullImage);
 
   placesList.prepend(cardElement);
-  newCard.querySelector('.popup__form').reset();
-  closeModal(newCard);
+  cardPopup.querySelector('.popup__form').reset();
+  closeModal(cardPopup);
 }
 
-imgformElement.addEventListener("submit", createCardSubmit);
+cardformElement.addEventListener("submit", createCardSubmit);
 
 //закрыть новую карточку
 closeCard.addEventListener("click", function () {
-  closeModal(newCard);
+  closeModal(cardPopup);
 });
 
 //открываем картинку
 function openfullImage(link, name) {
-    const btnImage = fullImage.querySelector(".popup__image");
+    const btnImage = imagePopup.querySelector(".popup__image");
     const captionImage = document.querySelector(".popup__caption");
     btnImage.src = link;
     btnImage.alt = name;
     captionImage.textContent = name;
-    openModal(fullImage);
+    openModal(imagePopup);
   }
   
   //закрываем картинку
     closeImage.addEventListener("click", () => {
-      closeModal(fullImage);
+      closeModal(imagePopup);
     });
+    
+    //закрытие по оверлей
+    document.addEventListener("click", closeOverley);
   
 //выводим на экран карточки
 initialCards.forEach((item) => {
