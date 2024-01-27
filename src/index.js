@@ -4,6 +4,9 @@ import { initialCards } from "./cards"; // добавление картинок
 import {createCard, likeCard, removeCard} from './components/card.js';
 import {openModal, closeModal, closeOverley} from './components/modal.js'; 
 
+import {enableValidation} from './components/validation.js';
+
+
 const content = document.querySelector(".content");
 const pageSection = content.querySelector(".places");
 const placesList = pageSection.querySelector(".places__list");
@@ -21,6 +24,17 @@ const cardformElement = document.querySelector(".popup_type_new-card .popup__for
 
 const imagePopup = document.querySelector(".popup_type_image");
 const closeImage = imagePopup.querySelector(".popup__close");
+
+const ValidationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+
+}
+enableValidation(ValidationConfig);
 
 //открыть окно профиля
 function openProfile() {

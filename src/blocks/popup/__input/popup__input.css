@@ -9,6 +9,19 @@
   padding: 10px 0 0;
   margin-bottom: 10px;
 }
+.popup_input-error {
+    display: none;
+    color: #FF0000;
+    font-size: 12px;
+    font-weight: 400;
+    position: absolute;   
+}
+.popup_input-error.popup_input-error_visible {
+  display: block;
+}
+.popup__input_type_error {
+  border-bottom: 1px solid #F00;
+}
 
 .popup__input:last-of-type {
   margin-bottom: 0;
