@@ -19,6 +19,7 @@ const apiFetch = async (url, conf) => {
     return await res.json();
   } catch (err) {
     console.log(err);
+    throw new Error(`Ошибка: ${res.status}.`);
   }
 };
 
@@ -45,42 +46,45 @@ export const updateUser = (name, about) =>
 
 /**
  * Создать новую картоку
- * @param {string} name 
- * @param {string} link 
+ * @param {string} name
+ * @param {string} link
  */
-export const newCard =  (name, link) => apiFetch("/cards", {
-  method: "POST",
-  body: JSON.stringify({
-    name: name,
-    link: link,
-  }),
-});
+export const newCard = (name, link) =>
+  apiFetch("/cards", {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      link: link,
+    }),
+  });
 /**
  * like карточки
- * @param {string} id 
+ * @param {string} id
  */
-export const like = (id) => apiFetch(`/cards/likes/${id}`,{method: "PUT"} )
+export const like = (id) => apiFetch(`/cards/likes/${id}`, { method: "PUT" });
 
 /**
  * убрать like
- * @param {string} id 
- */  
-export const unlike = (id) => apiFetch(`/cards/likes/${id}`,{method: "DELETE"} )
-  
+ * @param {string} id
+ */
+export const unlike = (id) =>
+  apiFetch(`/cards/likes/${id}`, { method: "DELETE" });
+
 /**
  * удаление карточки
- * @param {string} id 
+ * @param {string} id
  */
-export const deleteCard = (id) => apiFetch(`/cards/likes/${id}`,{method: "DELETE"} )
-  
+export const deleteCard = (id) =>
+  apiFetch(`/cards/likes/${id}`, { method: "DELETE" });
+
 /**
  * редактируем аватар
- * @param {string} url 
+ * @param {string} url
  */
-export const changeAvatar = (url) => apiFetch("/users/me/avatar", {
+export const changeAvatar = (url) =>
+  apiFetch("/users/me/avatar", {
     method: "PATCH",
     body: JSON.stringify({
       avatar: url,
-    })
+    }),
   });
-

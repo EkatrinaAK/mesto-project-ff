@@ -67,7 +67,11 @@ function openProfile() {
 
 btnEdit.addEventListener("click", openProfile);
 
-//редактирование профиля
+/**
+ * редактируем профиль
+ * @param evt Аргумент события submit
+ * @returns
+ */
 async function profileSubmit(evt) {
   evt.preventDefault();
   startPopupLoading(profilPopup);
@@ -77,9 +81,15 @@ async function profileSubmit(evt) {
   const inputDiscr = document.querySelector(".popup__input_type_description");
   profTitle.textContent = inputName.value;
   profDiscr.textContent = inputDiscr.value;
-  await updateUser(inputName.value, inputDiscr.value);
+  try {
+    await updateUser(inputName.value, inputDiscr.value);
+  } catch (err) {
+    console.log(err);
+    return;
+  } finally {
+    endPopupLoading(profilPopup);
+  }
   closeModal(profilPopup);
-  endPopupLoading(profilPopup);
 }
 
 profileformElement.addEventListener("submit", profileSubmit);
@@ -97,15 +107,25 @@ function openCard() {
 
 btnCard.addEventListener("click", openCard);
 
-//редактировать окно карточки
+/**
+ * редактируем карточку
+ * @param  evt Аргумент события submit
+ * @returns
+ */
 async function createCardSubmit(evt) {
   evt.preventDefault();
+  let createdCard;
   startPopupLoading(cardPopup);
   const inputName = document.querySelector(".popup__input_type_card-name");
   const inputUrl = document.querySelector(".popup__input_type_url");
-
-  const createdCard = await newCard(inputName.value, inputUrl.value);
-
+  try {
+    createdCard = await newCard(inputName.value, inputUrl.value);
+  } catch (err) {
+    console.log(err);
+    return;
+  } finally {
+    endPopupLoading(cardPopup);
+  }
   const cardElement = createCard(
     createdCard,
     removeCard,
@@ -116,7 +136,6 @@ async function createCardSubmit(evt) {
   cardPopup.querySelector(".popup__form").reset();
 
   closeModal(cardPopup);
-  endPopupLoading(cardPopup);
 }
 
 cardformElement.addEventListener("submit", createCardSubmit);
@@ -146,7 +165,10 @@ document.addEventListener("click", closeOverley);
 
 //открываем аватар
 function openAvatar() {
-  clearValidation(document.querySelector("#popup__form-avatar"), validationConfig);
+  clearValidation(
+    document.querySelector("#popup__form-avatar"),
+    validationConfig
+  );
   openModal(popupAvatar);
 }
 btnAvatar.addEventListener("click", openAvatar);
@@ -156,22 +178,42 @@ closeAvatar.addEventListener("click", () => {
   closeModal(popupAvatar);
 });
 
-//редактируем аватар
+/**
+ * редактируем авватар
+ * @param  evt Аргумент события submit
+ * @returns
+ */
 async function avatarSubmit(evt) {
   evt.preventDefault();
   startPopupLoading(popupAvatar);
   const inputUrl = popupAvatar.querySelector(".popup__input_type_url");
   const profile = document.querySelector(".profile");
   const profImage = profile.querySelector(".profile__image");
-  await changeAvatar(inputUrl.value);
+  try {
+    await changeAvatar(inputUrl.value);
+  } catch (err) {
+    console.log(err);
+    return;
+  } finally {
+    endPopupLoading(popupAvatar);
+  }
   profImage.style.backgroundImage = `url(${inputUrl.value})`;
   closeModal(popupAvatar);
-  endPopupLoading(popupAvatar);
 }
 avatarForm.addEventListener("submit", avatarSubmit);
 
-//?????
-fetchUser().then((user) => {
+/**
+ * Инициализация профиля и карточек
+ */
+async function init() {
+  let user;
+  let cards;
+  try {
+    user = await fetchUser();
+  } catch (err) {
+    console.log(err);
+    return;
+  }
   const profile = document.querySelector(".profile");
   const profTitle = profile.querySelector(".profile__title");
   const profDiscr = profile.querySelector(".profile__description");
@@ -180,12 +222,16 @@ fetchUser().then((user) => {
   profDiscr.textContent = user.about;
   profile.dataset.userId = user._id;
   profImage.style.backgroundImage = `url(${user.avatar})`;
-
-  //выводим на экран карточки
-  fetchCards().then((cards) => {
-    cards.forEach((item) => {
-      const cardElement = createCard(item, removeCard, likeCard, openfullImage);
-      placesList.append(cardElement);
-    });
+  try {
+    cards = await fetchCards();
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+  cards.forEach((item) => {
+    const cardElement = createCard(item, removeCard, likeCard, openfullImage);
+    placesList.append(cardElement);
   });
-});
+}
+
+init();

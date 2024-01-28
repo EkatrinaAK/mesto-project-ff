@@ -1,8 +1,5 @@
 import { like, unlike, deleteCard } from "./api";
-import {
-  startPopupLoading,
-  endPopupLoading,
-} from "./loading";
+import { startPopupLoading, endPopupLoading } from "./loading";
 import { openModal, closeModal } from "./modal";
 
 //добавляем карточку с картинкой
@@ -50,13 +47,16 @@ function likeCard(e) {
   const card = e.target.closest(".card");
   const cardId = card.dataset.cardId;
   const count = card.querySelector(".count_like");
-
-  if (e.target.classList.contains("card__like-button_is-active")) {
-    unlike(cardId);
-    count.textContent = parseInt(count.textContent, 10) - 1;
-  } else {
-    like(cardId);
-    count.textContent = parseInt(count.textContent, 10) + 1;
+  try {
+    if (e.target.classList.contains("card__like-button_is-active")) {
+      unlike(cardId);
+      count.textContent = parseInt(count.textContent, 10) - 1;
+    } else {
+      like(cardId);
+      count.textContent = parseInt(count.textContent, 10) + 1;
+    }
+  } catch (err) {
+    console.log(err);
   }
   e.target.classList.toggle("card__like-button_is-active");
 }
@@ -78,9 +78,15 @@ btnDelete.addEventListener("click", async () => {
     `.places__list .card[data-card-id="${cardId}"]`
   );
   cardToRemove.remove();
-  await deleteCard(cardId);
+  try {
+    await deleteCard(cardId);
+  } catch (err) {
+    console.log(err);
+    return;
+  } finally {
+    endPopupLoading(popupDelete);
+  }
   closeModal(popupDelete);
-  endPopupLoading(popupDelete);
 });
 
 popupDeleteClose.addEventListener("click", () => {
