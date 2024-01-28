@@ -44,9 +44,9 @@ const setEvents = (
 ) => {
   const inputs = Array.from(form.querySelectorAll(inputSelector));
   inputs.forEach((inputElement) => {
-    inputElement.addEventListener("input", () => {
-      return isValid(config, form, inputElement, inputErrorClass, errorClass);
-    });
+    inputElement.addEventListener("input", () =>
+      isValid(config, form, inputElement, inputErrorClass, errorClass)
+    );
   });
 };
 
