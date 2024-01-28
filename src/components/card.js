@@ -2,9 +2,14 @@ import { like, unlike, deleteCard } from "./api";
 import { startPopupLoading, endPopupLoading } from "./loading";
 import { openModal, closeModal } from "./modal";
 
-
 //добавляем карточку с картинкой
-function createCard(card,userId, callbackDelete, callbackLike, callbackOpenfullImage) {
+function createCard(
+  card,
+  userId,
+  callbackDelete,
+  callbackLike,
+  callbackOpenfullImage
+) {
   const cardTemplete = document.querySelector("#card-template").content;
   const cardElement = cardTemplete.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -41,23 +46,27 @@ function createCard(card,userId, callbackDelete, callbackLike, callbackOpenfullI
   });
   return cardElement;
 }
-//like
-function likeCard(e) {
+
+/**
+ * Обработчик лайка кнопки
+ * @param e Аргумент события клика кнопки лайфк
+ */
+async function likeCard(e) {
   const card = e.target.closest(".card");
   const cardId = card.dataset.cardId;
   const count = card.querySelector(".count_like");
+  let likeRes;
   try {
     if (e.target.classList.contains("card__like-button_is-active")) {
-      unlike(cardId);
-      count.textContent = parseInt(count.textContent, 10) - 1;
+      likeRes = await unlike(cardId);
     } else {
-      like(cardId);
-      count.textContent = parseInt(count.textContent, 10) + 1;
+      likeRes = await like(cardId);
     }
+    count.textContent = likeRes.likes.length;
+    e.target.classList.toggle("card__like-button_is-active");
   } catch (err) {
     console.log(err);
   }
-  e.target.classList.toggle("card__like-button_is-active");
 }
 //удаление карточки
 function removeCard(e) {
