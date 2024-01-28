@@ -81,8 +81,7 @@ async function profileSubmit(evt) {
   const profDiscr = document.querySelector(".profile__description");
   const inputName = document.querySelector(".popup__input_type_name");
   const inputDiscr = document.querySelector(".popup__input_type_description");
-  profTitle.textContent = inputName.value;
-  profDiscr.textContent = inputDiscr.value;
+
   try {
     await updateUser(inputName.value, inputDiscr.value);
   } catch (err) {
@@ -91,6 +90,8 @@ async function profileSubmit(evt) {
   } finally {
     endPopupLoading(profilPopup);
   }
+  profTitle.textContent = inputName.value;
+  profDiscr.textContent = inputDiscr.value;
   closeModal(profilPopup);
 }
 
