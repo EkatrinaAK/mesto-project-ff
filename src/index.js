@@ -218,7 +218,7 @@ async function init() {
   let user;
   let cards;
   try {
-    user = await fetchUser();
+    [user, cards] = await Promise.all([fetchUser(), fetchCards()]);
   } catch (err) {
     console.log(err);
     return;
@@ -230,12 +230,7 @@ async function init() {
   profDiscr.textContent = user.about;
   profile.dataset.userId = user._id;
   profImage.style.backgroundImage = `url(${user.avatar})`;
-  try {
-    cards = await fetchCards();
-  } catch (err) {
-    console.log(err);
-    return;
-  }
+
   cards.forEach((item) => {
     const cardElement = createCard(
       item,
