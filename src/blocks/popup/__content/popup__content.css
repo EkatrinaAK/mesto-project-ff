@@ -8,7 +8,9 @@
   box-sizing: border-box;
   padding: 34px 36px;
 }
-
+.popup_delete .popup__content {
+  min-height: auto;
+}
 @media screen and (max-width: 568px) {
   .popup__content {
     width: 100%;

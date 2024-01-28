@@ -9,6 +9,9 @@
   padding: 10px 0 0;
   margin-bottom: 10px;
 }
+.popup__input:invalid {
+  border-bottom: 1px solid #F00;
+}
 .popup_input-error {
     display: none;
     color: #FF0000;

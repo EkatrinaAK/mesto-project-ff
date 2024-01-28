@@ -4,7 +4,8 @@ import { createCard, likeCard, removeCard } from "./components/card.js";
 import { openModal, closeModal, closeOverley } from "./components/modal.js";
 
 import { enableValidation } from "./components/validation.js";
-import { fetchCards, fetchUser, newCard, updateUser } from "./components/api";
+import { fetchCards, fetchUser, newCard, updateUser,changeAvatar } from "./components/api";
+import {startPopupLoading,endPopupLoading,} from "./components/loading";
 
 const content = document.querySelector(".content");
 const pageSection = content.querySelector(".places");
@@ -19,6 +20,7 @@ const profileformElement = document.querySelector(
   ".popup_type_edit .popup__form"
 );
 
+
 const cardPopup = document.querySelector(".popup_type_new-card");
 const closeCard = document.querySelector(".popup_type_new-card .popup__close");
 const cardformElement = document.querySelector(
@@ -27,6 +29,12 @@ const cardformElement = document.querySelector(
 
 const imagePopup = document.querySelector(".popup_type_image");
 const closeImage = imagePopup.querySelector(".popup__close");
+
+const popupAvatar = document.querySelector('.popup_avatar');
+const btnAvatar = document.querySelector('.profile__image_edit-icon');
+const closeAvatar = document.querySelector('.popup_avatar .popup__close');
+const avatarForm = document.querySelector('#popup__form-avatar')
+
 
 const ValidationConfig = {
   formSelector: ".popup__form",
@@ -52,19 +60,21 @@ function openProfile() {
 btnEdit.addEventListener("click", openProfile);
 
 //редактирование профиля
-function profileSubmit(evt) {
+async function profileSubmit(evt) {
   evt.preventDefault();
+  startPopupLoading(profilPopup);
   const profTitle = document.querySelector(".profile__title");
   const profDiscr = document.querySelector(".profile__description");
   const inputName = document.querySelector(".popup__input_type_name");
   const inputDiscr = document.querySelector(".popup__input_type_description");
   profTitle.textContent = inputName.value;
   profDiscr.textContent = inputDiscr.value;
-  updateUser(inputName.value, inputDiscr.value);
+  await updateUser(inputName.value, inputDiscr.value);
   closeModal(profilPopup);
+  endPopupLoading(profilPopup);
 }
 
-profileformElement.addEventListener("submit", profileSubmit); // событие
+profileformElement.addEventListener("submit", profileSubmit); 
 
 //профиль закрыть
 profilClose.addEventListener("click", function () {
@@ -81,6 +91,7 @@ btnCard.addEventListener("click", openCard);
 //редактировать окно карточки
 async function createCardSubmit(evt) {
   evt.preventDefault();
+  startPopupLoading(cardPopup);
   const inputName = document.querySelector(".popup__input_type_card-name");
   const inputUrl = document.querySelector(".popup__input_type_url");
 
@@ -96,12 +107,13 @@ async function createCardSubmit(evt) {
   cardPopup.querySelector(".popup__form").reset();
 
   closeModal(cardPopup);
+  endPopupLoading(cardPopup);
 }
 
 cardformElement.addEventListener("submit", createCardSubmit);
 
 //закрыть новую карточку
-closeCard.addEventListener("click", function () {
+closeCard.addEventListener("click",  function () {
   closeModal(cardPopup);
 });
 
@@ -123,6 +135,32 @@ closeImage.addEventListener("click", () => {
 //закрытие по оверлей
 document.addEventListener("click", closeOverley);
 
+//открываем аватар 
+function openAvatar () {
+  openModal(popupAvatar);
+}
+btnAvatar.addEventListener('click',openAvatar)
+
+//закрываем аватар
+closeAvatar.addEventListener('click', () => {
+  closeModal(popupAvatar)
+})
+
+//редактируем аватар
+async function avatarSubmit (evt){
+  evt.preventDefault();
+  startPopupLoading(popupAvatar);
+  const inputUrl = popupAvatar.querySelector(".popup__input_type_url");
+  const profile = document.querySelector(".profile");
+  const profImage = profile.querySelector(".profile__image");
+  await changeAvatar (inputUrl.value);
+  profImage.style.backgroundImage = `url(${inputUrl.value})`;
+  closeModal(popupAvatar);
+  endPopupLoading(popupAvatar);
+}
+avatarForm.addEventListener('submit', avatarSubmit);
+
+//?????
 fetchUser().then((user) => {
   const profile = document.querySelector(".profile");
   const profTitle = profile.querySelector(".profile__title");
@@ -132,6 +170,7 @@ fetchUser().then((user) => {
   profDiscr.textContent = user.about;
   profile.dataset.userId = user._id;
   profImage.style.backgroundImage = `url(${user.avatar})`;
+
   //выводим на экран карточки
   fetchCards().then((cards) => {
     cards.forEach((item) => {

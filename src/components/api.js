@@ -5,73 +5,82 @@ const config = {
     "Content-Type": "application/json",
   },
 };
-
-export const fetchUser = async () => {
-  const res = await fetch(config.baseUrl + "/users/me", {
-    headers: config.headers,
-  });
-  return await res.json();
+/**
+ * Обертка для fetch с обработкой ошибок
+ * @param {string} url Адрес для fetch
+ * @param {object} conf Конфигурация для fetch
+ */
+const apiFetch = async (url, conf) => {
+  try {
+    const res = await fetch(config.baseUrl + url, {
+      headers: config.headers,
+      ...conf,
+    });
+    return await res.json();
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-export const fetchCards = async () => {
-  const res = await fetch(config.baseUrl + "/cards", {
-    headers: config.headers,
-  });
-  return await res.json();
-};
-export const updateUser = async (name, about) => {
-  const res = await fetch(config.baseUrl + "/users/me", {
+/**
+ * Получить текущего пользователя
+ */
+export const fetchUser = () => apiFetch("/users/me");
+
+export const fetchCards = () => apiFetch("/cards");
+
+/**
+ * Обновить профиль на сервере
+ * @param {string} name Имя профиле
+ * @param {string} about Описание профиля
+ */
+export const updateUser = (name, about) =>
+  apiFetch("/cards", {
     method: "PATCH",
-    headers: config.headers,
     body: JSON.stringify({
       name: name,
       about: about,
     }),
   });
-  return await res.json();
-};
-export const newCard = async (name, link) => {
-  //console.log('!!!!!!!',card.name, card.link);
-  const res = await fetch(config.baseUrl + "/cards", {
-    method: "POST",
+  
+/**
+ * Создать новую картоку
+ * @param {string} name 
+ * @param {string} link 
+ */
+export const newCard =  (name, link) => apiFetch("/cards", {
+  method: "POST",
+  body: JSON.stringify({
+    name: name,
+    link: link,
+  }),
+});
+/**
+ * like карточки
+ * @param {string} id 
+ */
+export const like = (id) => apiFetch(`/cards/likes/${id}`,{method: "PUT"} )
+
+/**
+ * убрать like
+ * @param {string} id 
+ */  
+export const unlike = (id) => apiFetch(`/cards/likes/${id}`,{method: "DELETE"} )
+  
+/**
+ * удаление карточки
+ * @param {string} id 
+ */
+export const deleteCard = (id) => apiFetch(`/cards/likes/${id}`,{method: "DELETE"} )
+  
+/**
+ * редактируем аватар
+ * @param {string} url 
+ */
+export const changeAvatar = (url) => apiFetch("/users/me/avatar", {
+    method: "PATCH",
     body: JSON.stringify({
-      name: name,
-      link: link,
-    }),
-    headers: config.headers,
+      avatar: url,
+    })
   });
-  return await res.json();
-};
 
-export const like = async (id) => {
-  const res = await fetch(config.baseUrl + `/cards/likes/${id}`, {
-    method: "PUT",
-    headers: config.headers,
-  });
-  return await res.json();
-};
-
-export const unlike = async (id) => {
-  const res = await fetch(`${config.baseUrl}/cards/likes/${id}`, {
-    method: "DELETE",
-    headers: config.headers,
-  });
-  return await res.json();
-};
-export const deleteCard = async (id) => { 
-    const res = await fetch (`${config.baseUrl}/cards/likes/${id}`, {
-        method:"DELETE",
-        headers: config.headers,
-    });
-    return await res.json();
-}
-export const changeAvatar = async (url) => {
-    const res = await fetch(`${config.baseUrl}/users/me/avatar`, {
-        method:"PATCH",
-        body: JSON.stringify({
-            avatar: url,
-          }),
-          headers:config.headers,
-    });
-    return await res.json();
-}

@@ -36,11 +36,17 @@
         <p class="footer__copyright">© 2021 Mesto Russia</p>
       </footer>
 
-      <div class="popup popup_type_edit">
+      <div class="popup popup_type_edit" data-loading-button-text="Cохранить...">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form" id="popup-edit_profile" name="edit-profile" novalidate>
+          <form
+            class="popup__form"
+            id="popup-edit_profile"
+            name="edit-profile"
+           
+            novalidate
+          >
             <input
               id="nameImput"
               type="text"
@@ -74,11 +80,16 @@
         </div>
       </div>
 
-      <div class="popup popup_type_new-card">
+      <div class="popup popup_type_new-card" data-loading-button-text="Cохранить...">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
-          <form class="popup__form" id="popup__form-add" name="new-place" novalidate>
+          <form
+            class="popup__form"
+            id="popup__form-add"
+            name="new-place"
+            novalidate
+          >
             <input
               id="newCard"
               type="text"
@@ -117,6 +128,38 @@
       </div>
     </div>
 
+    <div class="popup popup_delete" data-loading-button-text="Удаление...">
+      <div class="popup__content">
+        <button type="button" class="popup__close"></button>
+        <h3 class="popup__title">Вы уверены?</h3>
+        <button type="button" class="button popup__button">Да</button>
+      </div>
+    </div>
+
+    <div class="popup popup_avatar" data-loading-button-text="Cохранить...">
+      <div class="popup__content">
+        <button type="button" class="popup__close"></button>
+        <h3 class="popup__title">Обновить аватар</h3>
+        <form
+          class="popup__form"
+          id="popup__form-avatar"
+          name="editAvatar"
+          novalidate
+        >
+          <input
+            id="urlAvatar"
+            type="url"
+            name="avatarLink"
+            class="popup__input popup__input_type_url"
+            placeholder="Ссылка на картинку"
+            required
+          />
+          <span class="urlAvatar-error popup_input-error"></span>
+          <button type="submit" class="button popup__button">Сохранить</button>
+        </form>
+      </div>
+    </div>
+
     <template id="card-template">
       <li class="places__item card">
         <img class="card__image" src="" alt="" />
@@ -124,9 +167,8 @@
         <div class="card__description">
           <h2 class="card__title"></h2>
           <div class="like_container">
-          <button type="button" class="card__like-button">
-          </button>
-          <span class="count_like">1</span>
+            <button type="button" class="card__like-button"></button>
+            <span class="count_like"></span>
           </div>
         </div>
       </li>

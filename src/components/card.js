@@ -1,4 +1,9 @@
 import { like, unlike, deleteCard } from "./api";
+import {
+  startPopupLoading,
+  endPopupLoading,
+} from "./loading";
+import { openModal, closeModal } from "./modal";
 
 //добавляем карточку с картинкой
 function createCard(card, callbackDelete, callbackLike, callbackOpenfullImage) {
@@ -15,12 +20,12 @@ function createCard(card, callbackDelete, callbackLike, callbackOpenfullImage) {
 
   // удаление карточки
   const deleteButton = cardElement.querySelector(".card__delete-button");
-      deleteButton.addEventListener("click", callbackDelete);
+  deleteButton.addEventListener("click", callbackDelete);
 
-  if (card.owner._id === userId){
+  if (card.owner._id === userId) {
     deleteButton.addEventListener("click", callbackDelete);
-  }else{
-    deleteButton.classList.add('card__delete-button-hidden');
+  } else {
+    deleteButton.classList.add("card__delete-button-hidden");
   }
 
   //like
@@ -58,9 +63,27 @@ function likeCard(e) {
 //удаление карточки
 function removeCard(e) {
   const card = e.target.closest(".card");
-  const cardId = card.dataset.cardId;
-  e.target.closest(".card").remove();
-  deleteCard(cardId);
-
+  popupDelete.dataset.cardId = card.dataset.cardId;
+  openModal(popupDelete);
 }
+
+const popupDelete = document.querySelector(".popup_delete");
+const btnDelete = popupDelete.querySelector(".popup__button");
+const popupDeleteClose = popupDelete.querySelector(".popup__close");
+
+btnDelete.addEventListener("click", async () => {
+  startPopupLoading(popupDelete);
+  const cardId = popupDelete.dataset.cardId;
+  const cardToRemove = document.querySelector(
+    `.places__list .card[data-card-id="${cardId}"]`
+  );
+  cardToRemove.remove();
+  await deleteCard(cardId);
+  closeModal(popupDelete);
+  endPopupLoading(popupDelete);
+});
+
+popupDeleteClose.addEventListener("click", () => {
+  closeModal(popupDelete);
+});
 export { createCard, likeCard, removeCard };
