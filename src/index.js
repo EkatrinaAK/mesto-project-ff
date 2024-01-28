@@ -12,7 +12,7 @@ import {
   changeAvatar,
 } from "./components/api";
 import { startPopupLoading, endPopupLoading } from "./components/loading";
-
+import "./components/confirmDialog";
 const content = document.querySelector(".content");
 const pageSection = content.querySelector(".places");
 const placesList = pageSection.querySelector(".places__list");

@@ -1,6 +1,5 @@
 import { like, unlike, deleteCard } from "./api";
-import { startPopupLoading, endPopupLoading } from "./loading";
-import { openModal, closeModal } from "./modal";
+import { showPopupDelete } from "./confirmDialog";
 
 //добавляем карточку с картинкой
 function createCard(
@@ -68,37 +67,11 @@ async function likeCard(e) {
     console.log(err);
   }
 }
+
 //удаление карточки
 function removeCard(e) {
   const card = e.target.closest(".card");
-  popupDelete.dataset.cardId = card.dataset.cardId;
-  openModal(popupDelete);
+  showPopupDelete(card.dataset.cardId);
 }
 
-const popupDelete = document.querySelector(".popup_delete");
-const btnDelete = popupDelete.querySelector(".popup__button");
-const popupDeleteClose = popupDelete.querySelector(".popup__close");
-
-btnDelete.addEventListener("click", async () => {
-  startPopupLoading(popupDelete);
-  const cardId = popupDelete.dataset.cardId;
-  const cardToRemove = document.querySelector(
-    `.places__list .card[data-card-id="${cardId}"]`
-  );
-
-  try {
-    await deleteCard(cardId);
-  } catch (err) {
-    console.log(err);
-    return;
-  } finally {
-    endPopupLoading(popupDelete);
-  }
-  cardToRemove.remove();
-  closeModal(popupDelete);
-});
-
-popupDeleteClose.addEventListener("click", () => {
-  closeModal(popupDelete);
-});
 export { createCard, likeCard, removeCard };
