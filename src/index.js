@@ -48,7 +48,7 @@ const validationConfig = {
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
+  errorClass: "popup_input-error_visible",
 };
 enableValidation(validationConfig);
 
@@ -232,7 +232,13 @@ async function init() {
     return;
   }
   cards.forEach((item) => {
-    const cardElement = createCard(item, user._id, removeCard, likeCard, openfullImage);
+    const cardElement = createCard(
+      item,
+      user._id,
+      removeCard,
+      likeCard,
+      openfullImage
+    );
     placesList.append(cardElement);
   });
 }
