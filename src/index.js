@@ -40,6 +40,8 @@ const btnAvatar = document.querySelector(".profile__image_edit-icon");
 const closeAvatar = document.querySelector(".popup_avatar .popup__close");
 const avatarForm = document.querySelector("#popup__form-avatar");
 
+const profile = document.querySelector(".profile");
+
 const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -126,8 +128,10 @@ async function createCardSubmit(evt) {
   } finally {
     endPopupLoading(cardPopup);
   }
+  const userId = profile.dataset.userId;
   const cardElement = createCard(
     createdCard,
+    userId,
     removeCard,
     likeCard,
     openfullImage
@@ -214,7 +218,6 @@ async function init() {
     console.log(err);
     return;
   }
-  const profile = document.querySelector(".profile");
   const profTitle = profile.querySelector(".profile__title");
   const profDiscr = profile.querySelector(".profile__description");
   const profImage = profile.querySelector(".profile__image");
@@ -229,7 +232,7 @@ async function init() {
     return;
   }
   cards.forEach((item) => {
-    const cardElement = createCard(item, removeCard, likeCard, openfullImage);
+    const cardElement = createCard(item, user._id, removeCard, likeCard, openfullImage);
     placesList.append(cardElement);
   });
 }

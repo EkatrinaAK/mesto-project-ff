@@ -2,12 +2,11 @@ import { like, unlike, deleteCard } from "./api";
 import { startPopupLoading, endPopupLoading } from "./loading";
 import { openModal, closeModal } from "./modal";
 
+
 //добавляем карточку с картинкой
-function createCard(card, callbackDelete, callbackLike, callbackOpenfullImage) {
+function createCard(card,userId, callbackDelete, callbackLike, callbackOpenfullImage) {
   const cardTemplete = document.querySelector("#card-template").content;
   const cardElement = cardTemplete.querySelector(".card").cloneNode(true);
-  const profile = document.querySelector(".profile");
-  const userId = profile.dataset.userId;
   const cardImage = cardElement.querySelector(".card__image");
   cardImage.src = card.link;
   cardImage.alt = card.name;
