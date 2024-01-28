@@ -35,14 +35,14 @@ export const fetchCards = () => apiFetch("/cards");
  * @param {string} about Описание профиля
  */
 export const updateUser = (name, about) =>
-  apiFetch("/cards", {
+  apiFetch("/users/me", {
     method: "PATCH",
     body: JSON.stringify({
       name: name,
       about: about,
     }),
   });
-  
+
 /**
  * Создать новую картоку
  * @param {string} name 

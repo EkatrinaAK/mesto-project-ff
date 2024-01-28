@@ -2,7 +2,7 @@
   width: 100%;
   height: 47px;
   border: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   font-size: 14px;
   line-height: 18px;
   box-sizing: border-box;
@@ -10,20 +10,17 @@
   margin-bottom: 10px;
 }
 .popup__input:invalid {
-  border-bottom: 1px solid #F00;
+  border-bottom: 1px solid #f00;
 }
 .popup_input-error {
-    display: none;
-    color: #FF0000;
-    font-size: 12px;
-    font-weight: 400;
-    position: absolute;   
+  display: none;
+  color: #ff0000;
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 400;
 }
 .popup_input-error.popup_input-error_visible {
   display: block;
-}
-.popup__input_type_error {
-  border-bottom: 1px solid #F00;
 }
 
 .popup__input:last-of-type {

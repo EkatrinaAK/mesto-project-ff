@@ -3,9 +3,15 @@ import "./pages/index.css"; //настройка css
 import { createCard, likeCard, removeCard } from "./components/card.js";
 import { openModal, closeModal, closeOverley } from "./components/modal.js";
 
-import { enableValidation } from "./components/validation.js";
-import { fetchCards, fetchUser, newCard, updateUser,changeAvatar } from "./components/api";
-import {startPopupLoading,endPopupLoading,} from "./components/loading";
+import { enableValidation, clearValidation } from "./components/validation.js";
+import {
+  fetchCards,
+  fetchUser,
+  newCard,
+  updateUser,
+  changeAvatar,
+} from "./components/api";
+import { startPopupLoading, endPopupLoading } from "./components/loading";
 
 const content = document.querySelector(".content");
 const pageSection = content.querySelector(".places");
@@ -20,7 +26,6 @@ const profileformElement = document.querySelector(
   ".popup_type_edit .popup__form"
 );
 
-
 const cardPopup = document.querySelector(".popup_type_new-card");
 const closeCard = document.querySelector(".popup_type_new-card .popup__close");
 const cardformElement = document.querySelector(
@@ -30,13 +35,12 @@ const cardformElement = document.querySelector(
 const imagePopup = document.querySelector(".popup_type_image");
 const closeImage = imagePopup.querySelector(".popup__close");
 
-const popupAvatar = document.querySelector('.popup_avatar');
-const btnAvatar = document.querySelector('.profile__image_edit-icon');
-const closeAvatar = document.querySelector('.popup_avatar .popup__close');
-const avatarForm = document.querySelector('#popup__form-avatar')
+const popupAvatar = document.querySelector(".popup_avatar");
+const btnAvatar = document.querySelector(".profile__image_edit-icon");
+const closeAvatar = document.querySelector(".popup_avatar .popup__close");
+const avatarForm = document.querySelector("#popup__form-avatar");
 
-
-const ValidationConfig = {
+const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
@@ -44,10 +48,14 @@ const ValidationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 };
-enableValidation(ValidationConfig);
+enableValidation(validationConfig);
 
 //открыть окно профиля
 function openProfile() {
+  clearValidation(
+    document.querySelector("#popup-edit_profile"),
+    validationConfig
+  );
   openModal(profilPopup);
   const profTitle = document.querySelector(".profile__title");
   const profDiscr = document.querySelector(".profile__description");
@@ -74,7 +82,7 @@ async function profileSubmit(evt) {
   endPopupLoading(profilPopup);
 }
 
-profileformElement.addEventListener("submit", profileSubmit); 
+profileformElement.addEventListener("submit", profileSubmit);
 
 //профиль закрыть
 profilClose.addEventListener("click", function () {
@@ -83,6 +91,7 @@ profilClose.addEventListener("click", function () {
 
 //открыть окно новой карточки
 function openCard() {
+  clearValidation(document.querySelector("#popup__form-add"), validationConfig);
   openModal(cardPopup);
 }
 
@@ -113,7 +122,7 @@ async function createCardSubmit(evt) {
 cardformElement.addEventListener("submit", createCardSubmit);
 
 //закрыть новую карточку
-closeCard.addEventListener("click",  function () {
+closeCard.addEventListener("click", function () {
   closeModal(cardPopup);
 });
 
@@ -135,30 +144,31 @@ closeImage.addEventListener("click", () => {
 //закрытие по оверлей
 document.addEventListener("click", closeOverley);
 
-//открываем аватар 
-function openAvatar () {
+//открываем аватар
+function openAvatar() {
+  clearValidation(document.querySelector("#popup__form-avatar"), validationConfig);
   openModal(popupAvatar);
 }
-btnAvatar.addEventListener('click',openAvatar)
+btnAvatar.addEventListener("click", openAvatar);
 
 //закрываем аватар
-closeAvatar.addEventListener('click', () => {
-  closeModal(popupAvatar)
-})
+closeAvatar.addEventListener("click", () => {
+  closeModal(popupAvatar);
+});
 
 //редактируем аватар
-async function avatarSubmit (evt){
+async function avatarSubmit(evt) {
   evt.preventDefault();
   startPopupLoading(popupAvatar);
   const inputUrl = popupAvatar.querySelector(".popup__input_type_url");
   const profile = document.querySelector(".profile");
   const profImage = profile.querySelector(".profile__image");
-  await changeAvatar (inputUrl.value);
+  await changeAvatar(inputUrl.value);
   profImage.style.backgroundImage = `url(${inputUrl.value})`;
   closeModal(popupAvatar);
   endPopupLoading(popupAvatar);
 }
-avatarForm.addEventListener('submit', avatarSubmit);
+avatarForm.addEventListener("submit", avatarSubmit);
 
 //?????
 fetchUser().then((user) => {
