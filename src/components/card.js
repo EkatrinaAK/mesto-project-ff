@@ -85,7 +85,7 @@ btnDelete.addEventListener("click", async () => {
   const cardToRemove = document.querySelector(
     `.places__list .card[data-card-id="${cardId}"]`
   );
-  cardToRemove.remove();
+
   try {
     await deleteCard(cardId);
   } catch (err) {
@@ -94,6 +94,7 @@ btnDelete.addEventListener("click", async () => {
   } finally {
     endPopupLoading(popupDelete);
   }
+  cardToRemove.remove();
   closeModal(popupDelete);
 });
 
