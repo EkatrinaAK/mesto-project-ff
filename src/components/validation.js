@@ -80,7 +80,6 @@ export const clearValidation = (formElement, validationConfig) => {
       validationConfig
     );
     inputElement.setCustomValidity("");
-    inputElement.value = "";
   });
   buttonElement.disabled = true;
   buttonElement.classList.add(validationConfig.inactiveButtonClass);

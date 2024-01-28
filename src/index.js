@@ -104,6 +104,10 @@ profilClose.addEventListener("click", function () {
 //открыть окно новой карточки
 function openCard() {
   clearValidation(document.querySelector("#popup__form-add"), validationConfig);
+  const inputName = document.querySelector(".popup__input_type_card-name");
+  const inputUrl = document.querySelector(".popup__input_type_url");
+  inputUrl.value = "";
+  inputName.value = "";
   openModal(cardPopup);
 }
 
