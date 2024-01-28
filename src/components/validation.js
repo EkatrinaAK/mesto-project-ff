@@ -30,9 +30,9 @@ const isValid = (form, input) => {
   }
 };
 
-function hasInvalid(inputs) {
+/*function hasInvalid(inputs) {
   return inputs.some((input) => !input.validity.valid);
-}
+}*/
 
 const setEvents = (
   form,
